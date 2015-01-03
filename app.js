@@ -10,8 +10,6 @@ var users = require('./routes/users');
 
 var app = express();
 
-//Define an angular module for our app
-var sampleApp = angular.module('sampleApp', []);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -60,34 +58,5 @@ app.use(function(err, req, res, next) {
 });
 
 
-sampleApp.config(['$routeProvider',
-    function($routeProvider) {
-        $routeProvider.
-            when('/Test1', {
-                templateUrl: 'views/test1.html',
-                controller: 'Test1Controller'
-            }).
-            when('/ShowOrders', {
-                templateUrl: 'views/test2.html',
-                controller: 'Test2Controller'
-            }).
-            otherwise({
-                redirectTo: '/'
-            });
-    }]);
-
-
-sampleApp.controller('Test1Controller', function($scope) {
-
-    $scope.message = 'This is Test1';
-
-});
-
-
-sampleApp.controller('Test2Controller', function($scope) {
-
-    $scope.message = 'This is Test2';
-
-});
 
 module.exports = app;
