@@ -8,6 +8,33 @@
         {
             list-style-type: none;
         }
+
+        .nav
+        {
+            background : rgba(0,0,0,0.6);
+            height: 2.56em;
+            padding : 8px;
+            font-family :  "Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;
+            font-size: 18px;
+            text-align: center;
+            color : #f7f8f9;
+        }
+
+        .searchForm
+        {
+            padding: 20px;
+            position: fixed;
+            float:left;
+            background-color: #eeeeee;
+            margin-left: 10px;
+
+        }
+        .section
+        {
+            margin-top: 10px;
+            float: left;
+            padding-left: 250px;
+        }
     </style>
 
     <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
@@ -36,8 +63,8 @@
 <header>
     <nav class="navbar navbar-default">
         <ul class="nav navbar-nav">
-            <li><a href = "#/TEST1">TEST1</a></li>
-            <li><a href = "#/TEST2">TEST2</a></li>
+            <li>Will's IOS Game Finder</li>
+            <!--<li><a href = "#/TEST2">TEST2</a></li>-->
         </ul>
     </nav>
 </header>
@@ -46,25 +73,24 @@
 <div ng-controller="MyCtrl">
 
 
-
-    <form role="form">
+    <form class="searchForm" role="form">
         <div class="form-group">
-            <label>Rating lower bound (#)</label>
+            <label>Rating lower bound (#)</label><br>
             <input type="text" ng-model="ratingMin" placeholder ="0">
             </div>
         <div class="form-group">
-            <label>Keywords</label>
+            <label>Keywords</label><br>
             <input type="text" ng-model="searchKeywords">
         </div>
         <div class="form-group">
-            <label>min number of ratings</label>
+            <label>min number of ratings</label><br>
             <input type="text" ng-model="ratingCountMin" placeholder ="200">
         </div>
         <button ng-click="search()">Search</button>
 
     </form>
 
-
+<div class="section">
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -108,7 +134,8 @@
         </table>
         </div>
 
-
+</div>
+    </div>
 
 <script>
 
