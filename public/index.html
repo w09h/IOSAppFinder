@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <style>
+        ul
+        {
+            list-style-type: none;
+        }
+    </style>
+
+    <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular-resource.js"></script>
+    <script src="app.js"></script>
+
+</head>
+
+
+
+<body ng-app="MyApp">
+
+
+<!--<body ng-app="MyApp">-->
+<!--<div ng-controller="MyCtrl">-->
+    <!--<input type="text" ng-model="searchTerm" placeholder="Search term">-->
+    <!--<button ng-click="search()">Search</button>-->
+    <!--<ul ng-repeat="result in searchResult.results">-->
+        <!--<li>text: {{result.text}}</li>-->
+    <!--</ul>-->
+<!--</div>-->
+
+<header>
+    <nav class="navbar navbar-default">
+        <ul class="nav navbar-nav">
+            <li><a href = "#/TEST1">TEST1</a></li>
+            <li><a href = "#/TEST2">TEST2</a></li>
+        </ul>
+    </nav>
+</header>
+
+
+<div ng-controller="MyCtrl">
+
+
+
+    <form role="form">
+        <div class="form-group">
+            <label>Rating lower bound (#)</label>
+            <input type="text" ng-model="ratingMin" placeholder ="0">
+            </div>
+        <div class="form-group">
+            <label>Keywords</label>
+            <input type="text" ng-model="searchKeywords">
+        </div>
+        <div class="form-group">
+            <label>min number of ratings</label>
+            <input type="text" ng-model="ratingCountMin" placeholder ="200">
+        </div>
+        <button ng-click="search()">Search</button>
+
+    </form>
+
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Logo</th>
+                <!--<th>Name</th>-->
+                <!--<th>Current v Rating</th>-->
+                <!--<th>Current v # Ratings</th>-->
+                <!--<th>releaseDate</th>-->
+                <!--<th>All Avg Rating</th>-->
+                <!--<th>All # Ratings</th>-->
+                <th> Pics</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr ng-repeat="result in searchResult.results | filter: greaterThan('averageUserRating', ratingMin) | filter: greaterThan('userRatingCount' , ratingCountMin)| orderBy: ['averageUserRating','userRatingCount', 'averageUserRatingForCurrentVersion', 'userRatingCountForCurrentVersion']:true">
+
+                <td>
+                    <ul>
+                        <li><a href = {{result.trackViewUrl}}><img src="{{result.artworkUrl60}}" ></a></li>
+                        <!--<td width = "60" height="60"><a href = {{result.trackViewUrl}}>{{result.trackName}}</a></td>-->
+                <li>rating: {{result.averageUserRatingForCurrentVersion}}</li>
+                <li>users: {{result.userRatingCountForCurrentVersion}}</li>
+
+                <li>{{result.releaseDate}}</li>
+                <li><ul>
+                    <li ng-repeat="genre in result.genres"><a href="/{{genre}}")>{{genre}}</a></li>
+
+                </ul>
+                <!--<td>{{result.averageUserRating}}</td>-->
+                <!--<td>{{result.userRatingCount}}</td>-->
+                </ul></td>
+                <td ng-repeat="pictures in result.screenshotUrls">
+                    <a href={{pictures}}><img src={{pictures}} height="320" width="320"  ></a>
+                </td>
+
+
+            </tr>
+            </tbody>
+        </table>
+        </div>
+
+
+
+<script>
+
+    var app = angular.module("MyApp", ["ngResource"]);
+
+
+
+    function MyCtrl($scope, $resource) {
+        var AppleAPI = $resource("https://itunes.apple.com/search",
+                { callback: "JSON_CALLBACK" },
+                { get: { method: "JSONP" }});
+
+        $scope.search = function() {
+            $scope.searchResult = AppleAPI.get({ term: $scope.searchKeywords ,
+                    country : "us",
+                    entity : "software",
+                    limit : "20"});
+        };
+
+
+
+
+
+        $scope.greaterThan = function(prop, val){
+            return function(item){
+                if(val == null) val =0;
+                if (item[prop] > val) return true;
+            }
+        }
+
+        $scope.years = function(releaseDate){
+            return releaseDate.contains(2014) || releaseDate.contains(2015);
+        };
+
+    }
+
+
+//    app.controller("PostsCtrl", function($scope, $http) {
+//        $http.get('https://itunes.apple.com/search?entity=software&term=game').
+//                success(function(data, status, headers, config) {
+//                    $scope.posts = data;
+//                }).
+//                error(function(data, status, headers, config) {
+//                    // log error
+//                });
+//    });
+</script>
+</body>
+</html>
